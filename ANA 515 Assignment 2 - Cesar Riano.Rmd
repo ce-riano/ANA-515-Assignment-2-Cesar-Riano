@@ -1,0 +1,77 @@
+---
+title: "ANA 515 Assignment 2"
+author: "Cesar Riano"
+date: '2022-09-17'
+output: 
+    html_document:
+        css: bootstrap.min.css
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Section 1: Description of the data
+
+The data set used for this assignment was obtained in a survey of students math and portuguese language courses in secondary school. It contains social, gender and study information about students. This data set can be used for exploratory data analysis or to try to predict students final grade based on other variables. In addition to this, correlations between variables can also be drawn. The file is delimited and commas are used as the delimiters. In essence, is a csv file (comma separated file) which gives structure to the file. Normally I would open the file with Excel or Numbers.
+
+
+```{r, include = FALSE}
+#The include = FALSE function hides both the code and output in my output document
+
+#Packages needed: 
+library(tidyverse)
+library(knitr)
+library(bslib)
+library(dplyr)
+```
+
+## Section 2: Reading the data into R
+
+```{r, include = TRUE}
+#This next lines are getting the data from a csv file I downloaded from the kaggle link I put on the discussion on week 3: https://www.kaggle.com/datasets/uciml/student-alcohol-consumption?resource=download
+#I had to download it to my computer because the kaggle link has 3 files in it so it wasn't easy to simply read the data in from the url. 
+# The data was read using the read.csv R function
+
+CR_data<-read.csv("student-mat.csv")
+names(CR_data)
+glimpse(CR_data)
+```
+
+## Section 3: Clean the data
+
+```{r, include = TRUE}
+#this next line is creating a subset with only the sex, age, traveltime and absences columns
+
+CR_datasub <- CR_data %>% 
+  select(sex, age, traveltime, absences)
+summary(CR_datasub)
+```
+
+## Section 4: Characteristics of the data 
+
+We have  `r nrow(CR_datasub)` rows, and `r ncol(CR_datasub)` The names of the columns and a brief description of each are in the table below:
+
+```{r, include = TRUE}
+#this makes a new data.frame called text_tbl with two columns, Names and Description
+columns_summary <- data.frame(
+Columns = c(colnames(CR_datasub)),
+Description = c("this column contains the sex of the students", "this column contains the age of the students", "this column contains the commute time to school", "this column contains the number of absences")
+)
+
+kable(columns_summary, caption = "Descriptive table")
+```
+
+## Section 5: Summary statistics:
+
+```{r, include = TRUE}
+#this next line is creating a subset with only the younger section of the data (age < 18) and 2 variables: traveltime and absences.
+#then it is printing a summary of the subset
+
+youthData <- CR_datasub %>% 
+  filter(age <= 18) %>% 
+  select(sex, traveltime, absences)
+summary(youthData)
+
+```
+
